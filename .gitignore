@@ -1,0 +1,85 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# ASP.NET Core
+appsettings.Development.json
+
+# Logs
+*.log
+
+# NuGet
+*.nupkg
+packages/
+
+# Publish output
+publish/
+wwwroot/uploads/
+
+# Azure
+PublishScripts/
+
+# Test Results
+TestResults/
+
+# Entity Framework
+*.mdf
+*.ldf
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Mac
+.DS_Store
+
+# ReSharper
+_ReSharper*/
+*.DotSettings.user
+
+# Temporary files
+*.tmp
+*.temp
+
+# Coverage
+coverage/
+*.coverage
+*.coveragexml
+
+# Generated files
+Generated_Code/
+
+# Local database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Secrets
+secrets.json
+
+# Environment files
+.env
+.env.*
+
+# Node modules (if frontend tooling is added later)
+node_modules/
+
+# Azure Key
+*.pem
