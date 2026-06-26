@@ -1,10 +1,29 @@
-﻿namespace BincomCarDealer.DTO {
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BincomCarDealer.DTO {
     public class CreateCarUploadDto {
-        public string Name { get; set; } = "";
-        public string Brand { get; set; } = "";
+        [Required]
+        public string Make { get; set; } = "";
+
+        [Required]
+        public string Model { get; set; } = "";
+
+        [Range(1900, 2027)]
+        public int Year { get; set; }
+
+        [Range(0, double.MaxValue)]
         public decimal Price { get; set; }
+
+        [Range(0, int.MaxValue)]
+        public int Mileage { get; set; }
+
+        [Required]
+        public string BodyStyle { get; set; } = ""; 
+
         public string Description { get; set; } = "";
-        public required IFormFile Image {  get; set; }
+
+        [Required]
+        public required IFormFile Image { get; set; }
     }
 
     public class CreateInquiryFormDto {

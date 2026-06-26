@@ -4,31 +4,61 @@
     ViewData["Title"] = "Manage Cars";
 }
 
-<div style="max-width:900px; margin: 3rem auto;">
-    <h2>Manage Cars</h2>
+<style>
+    /* When the checkbox is checked, hide the initial delete button */
+    .delete-checkbox:checked ~ .init-delete-btn {
+        display: none !important;
+    }
+    
+    /* When the checkbox is checked, show the confirmation controls */
+    .delete-checkbox:checked ~ .confirm-controls {
+        display: inline-block !important;
+    }
+</style> 
+
+<div style="max-width:900px; margin: 3rem auto; font-family: sans-serif;">
+    <h2 style="margin-bottom: 1.5rem;">Manage Cars</h2>
 
     @if (Model.Any())
     {
         <table style="width:100%; border-collapse: collapse;">
             <thead>
-                <tr>
-                    <th style="text-align:left; border-bottom:1px solid #ccc;">Name</th>
-                    <th style="text-align:left; border-bottom:1px solid #ccc;">Brand</th>
-                    <th style="text-align:left; border-bottom:1px solid #ccc;">Price</th>
-                    <th style="text-align:left; border-bottom:1px solid #ccc;">Uploaded</th>
+                <tr style="background-color: #f8f9fa;">
+                    <th style="text-align:left; padding: 0.75rem; border-bottom:2px solid #dee2e6;">Year</th>
+                    <th style="text-align:left; padding: 0.75rem; border-bottom:2px solid #dee2e6;">Make</th>
+                    <th style="text-align:left; padding: 0.75rem; border-bottom:2px solid #dee2e6;">Model</th>
+                    <th style="text-align:left; padding: 0.75rem; border-bottom:2px solid #dee2e6;">Price</th>
+                    <th style="text-align:left; padding: 0.75rem; border-bottom:2px solid #dee2e6;">Uploaded</th>
+                    <th style="text-align:left; padding: 0.75rem; border-bottom:2px solid #dee2e6;">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var car in Model)
                 {
-                    <tr>
-                        <td>@car.Name</td>
-                        <td>@car.Brand</td>
-                        <td>₦@car.Price.ToString("N0")</td>
-                        <td>@car.UploadedAt.ToString("MMM dd, yyyy")</td>
-                        <td> <a asp-action="DeleteCar" asp-controller="Admin" asp-route-id="@car.Id" style="display:inline-block; padding:0.5rem 1rem; background:#222; color:#fff; text-decoration:none; border-radius:6px;">
+                    <tr style="border-bottom: 1px solid #dee2e6;">
+                        <td style="padding: 0.75rem; vertical-align: middle;">@car.Year</td>
+                        <td style="padding: 0.75rem; vertical-align: middle;">@car.Make</td>
+                        <td style="padding: 0.75rem; vertical-align: middle;">@car.Model</td>
+                        <td style="padding: 0.75rem; vertical-align: middle; font-weight: bold; color: #2e7d32;">₦@car.Price.ToString("N0")</td>
+                        <td style="padding: 0.75rem; vertical-align: middle; color: #666;">@car.UploadedAt.ToString("MMM dd, yyyy")</td>
+                        <td style="padding: 0.75rem; vertical-align: middle; min-width: 140px;">
+                            <input type="checkbox" id="confirm-@car.Id" class="delete-checkbox" style="display: none;" />
+
+                            <label for="confirm-@car.Id" class="init-delete-btn" style="display:inline-block; padding:0.4rem 0.8rem; background:#dc3545; color:#fff; border-radius:4px; font-size: 0.9rem; font-weight: bold; cursor:pointer; user-select: none;">
                                 Delete
-                            </a>
+                            </label>
+
+                            <span class="confirm-controls" style="display:none;">
+                                <span style="font-size:0.85rem; font-weight:bold; color:#dc3545; margin-right:0.4rem;">Sure?</span>
+        
+                                <a asp-action="DeleteCar" asp-controller="Admin" asp-route-id="@car.Id" style="display:inline-block; padding:0.3rem 0.6rem; background:#28a745; color:#fff; text-decoration:none; border-radius:4px; font-size: 0.85rem; font-weight: bold; margin-right:0.2rem;">
+                                    Yes
+                                </a>
+        
+                                <label for="confirm-@car.Id" style="display:inline-block; padding:0.3rem 0.6rem; background:#6c757d; color:#fff; border-radius:4px; font-size: 0.85rem; font-weight: bold; cursor:pointer; user-select: none;">
+                                    No
+                                </label>
+                            </span>
                         </td>
                     </tr>
                 }
@@ -37,6 +67,11 @@
     }
     else
     {
-        <p>No cars uploaded yet.</p>
+        <div style="padding: 2rem; background: #f8f9fa; border-radius: 8px; text-align: center; color: #666;">
+            <p style="margin: 0;">No cars uploaded yet.</p>
+        </div>
     }
+
+    
+    <p style="margin-top:1rem;"><a asp-action="Dashboard" asp-controller="Admin">&larr; Back to Dashboard</a></p>
 </div>

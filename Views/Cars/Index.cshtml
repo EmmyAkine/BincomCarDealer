@@ -4,33 +4,55 @@
     ViewData["Title"] = "Available Cars";
 }
 
-<div style="max-width:1100px; margin: 3rem auto; font-family: sans-serif;">
-    <h1>Available Cars</h1>
+<div style="max-width:1100px; margin: 3rem auto; font-family: sans-serif; padding: 0 1rem;">
+    <h1 style="margin-bottom: 0.5rem;">Available Cars</h1>
+    <p style="color: #666; margin-bottom: 2rem;">Browse our current inventory of quality vehicles.</p>
 
-    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:1.5rem; margin-top:2rem;">
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:2rem;">
         @if (Model.Any())
         {
             @foreach (var car in Model)
             {
-                <div style="border:1px solid #ddd; border-radius:10px; overflow:hidden;">
+                var carTitle = $"{car.Year} {car.Make} {car.Model}";
+                
+                <div style="border:1px solid #e0e0e0; border-radius:12px; overflow:hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; background: #fff;">
+                    
                     @if (!string.IsNullOrEmpty(car.ImagePath))
                     {
-                        <img src="@car.ImagePath" alt="@car.Name" style="width:100%; height:180px; object-fit:cover;" />
+                        <img src="@car.ImagePath" alt="@carTitle" style="width:100%; height:200px; object-fit:cover;" />
                     }
-                    <div style="padding:1rem;">
-                        <h3 style="margin:0 0 0.25rem;">@car.Name</h3>
-                        <p style="margin:0 0 0.5rem; color:#666;">@car.Brand</p>
-                        <p style="margin:0 0 1rem; font-weight:bold;">₦@car.Price.ToString("N0")</p>
-                        <a asp-action="Details" asp-controller="Cars" asp-route-id="@car.Id" style="display:inline-block; padding:0.5rem 1rem; background:#222; color:#fff; text-decoration:none; border-radius:6px;">
-                            View Details
-                        </a>
+                    else
+                    {
+                        <div style="width:100%; height:200px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #aaa; font-size: 0.9rem;">
+                            No Image Available
+                        </div>
+                    }
+                    
+                    <div style="padding:1.25rem; display: flex; flex-direction: column; flex-grow: 1;">
+                        <h3 style="margin:0 0 0.35rem; font-size: 1.2rem; color: #333;">@carTitle</h3>
+                        
+                        <p style="margin:0 0 0.75rem; color:#777; font-size: 0.9rem; font-weight: 500;">
+                            @car.BodyStyle &nbsp;•&nbsp; @car.Mileage.ToString("N0") km
+                        </p>
+                        
+                        <p style="margin:0 0 1.25rem; font-size: 1.3rem; font-weight:bold; color:#2e7d32;">
+                            ₦@car.Price.ToString("N0")
+                        </p>
+                        
+                        <div style="margin-top: auto;">
+                            <a asp-action="Details" asp-controller="Cars" asp-route-id="@car.Id" style="display:block; text-align: center; padding:0.6rem 1rem; background:#007bff; color:#fff; text-decoration:none; border-radius:6px; font-weight: bold; font-size: 0.95rem;">
+                                View Details
+                            </a>
+                        </div>
                     </div>
                 </div>
             }
         }
         else
         {
-            <p>No cars available yet.</p>
+            <div style="grid-column: 1 / -1; padding: 3rem; background: #f8f9fa; border-radius: 8px; text-align: center; color: #666;">
+                <p style="margin: 0; font-size: 1.1rem;">No cars available on the lot right now. Check back soon!</p>
+            </div>
         }
     </div>
 </div>

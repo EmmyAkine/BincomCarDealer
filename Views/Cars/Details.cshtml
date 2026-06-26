@@ -1,23 +1,31 @@
 ﻿@model BincomCarDealer.Models.CarItem
 
 @{
-    ViewData["Title"] = Model.Name;
+    var carTitle = $"{Model.Year} {Model.Make} {Model.Model}";
+    ViewData["Title"] = carTitle;
     bool showSuccess = TempData["InquirySuccess"] != null;
 }
 
-<div style="max-width:700px; margin: 3rem auto; font-family: sans-serif;">
+<div style="max-width:700px; margin: 3rem auto; font-family: sans-serif; line-height: 1.5;">
 
     @if (!string.IsNullOrEmpty(Model.ImagePath))
     {
-        <img src="@Model.ImagePath" alt="@Model.Name" style="width:100%; max-height:350px; object-fit:cover; border-radius:10px;" />
+        <img src="@Model.ImagePath" alt="@carTitle" style="width:100%; max-height:350px; object-fit:cover; border-radius:10px;" />
     }
 
-    <h1 style="margin-top:1rem;">@Model.Name</h1>
-    <p style="color:#666;">@Model.Brand</p>
-    <p style="font-size:1.3rem; font-weight:bold;">₦@Model.Price.ToString("N0")</p>
-    <p>@Model.Description</p>
+    <h1 style="margin-top:1rem; margin-bottom:0.2rem;">@carTitle</h1>
+    
+    <p style="color:#666; margin-top:0; font-size:1.1rem;">
+        @Model.BodyStyle &nbsp;|&nbsp; @Model.Mileage.ToString("N0") km
+    </p>
+    
+    <p style="font-size:1.6rem; font-weight:bold; color:#2e7d32; margin: 1rem 0;">₦@Model.Price.ToString("N0")</p>
+    
+    <div style="background:#f9f9f9; padding:1rem; border-radius:8px; margin-bottom:2rem;">
+        <p style="margin:0; white-space: pre-line;">@Model.Description</p>
+    </div>
 
-    <hr style="margin:2rem 0;" />
+    <hr style="margin:2rem 0; border:0; border-top:1px solid #ddd;" />
 
     @if (showSuccess)
     {
@@ -27,29 +35,29 @@
     }
     else
     {
-        <h3>Interested in this car?</h3>
+        <h3 style="margin-bottom:1rem;">Interested in this car?</h3>
         <form method="post" asp-action="Inquire" asp-controller="Cars">
             @Html.AntiForgeryToken()
             <input type="hidden" name="carId" value="@Model.Id" />
 
             <div style="margin-bottom:1rem;">
-                <label>Your Name</label><br />
-                <input type="text" name="name" required style="width:100%; padding:0.5rem;" />
+                <label style="display:block; margin-bottom:0.3rem; font-weight:bold;">Your Name</label>
+                <input type="text" name="name" required style="width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;" />
             </div>
 
             <div style="margin-bottom:1rem;">
-                <label>Your Email</label><br />
-                <input type="email" name="email" required style="width:100%; padding:0.5rem;" />
+                <label style="display:block; margin-bottom:0.3rem; font-weight:bold;">Your Email</label>
+                <input type="email" name="email" required style="width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;" />
             </div>
 
             <div style="margin-bottom:1rem;">
-                <label>Message</label><br />
-                <textarea name="message" rows="4" required style="width:100%; padding:0.5rem;"></textarea>
+                <label style="display:block; margin-bottom:0.3rem; font-weight:bold;">Message</label>
+                <textarea name="message" rows="4" required style="width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px; box-sizing:border-box; resize:vertical;"></textarea>
             </div>
 
-            <button type="submit" style="padding:0.5rem 1.5rem;">Send Inquiry</button>
+            <button type="submit" style="padding:0.7rem 2rem; background:#007bff; color:white; border:none; border-radius:4px; font-weight:bold; cursor:pointer;">Send Inquiry</button>
         </form>
     }
 
-    <p style="margin-top:1.5rem;"><a asp-action="Index" asp-controller="Cars">&larr; Back to all cars</a></p>
+    <p style="margin-top:2rem;"><a asp-action="Index" asp-controller="Cars" style="color:#007bff; text-decoration:none;">&larr; Back to all cars</a></p>
 </div>

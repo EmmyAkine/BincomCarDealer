@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace BincomCarDealer.Controllers {
     public class AdminController : Controller {
@@ -24,7 +23,7 @@ namespace BincomCarDealer.Controllers {
         }
 
         public IActionResult Index() {
-            return RedirectToAction("Login");
+            return RedirectToAction("Dashboard");
         }
 
         //LOGIN..................
@@ -97,11 +96,14 @@ namespace BincomCarDealer.Controllers {
                 imagePath = "/uploads/" + fileName;
             }
             var car = new CarItem {
-                Name = dto.Name,
-                Brand = dto.Brand,
+                Year = dto.Year,
+                Make = dto.Make,
+                Model = dto.Model,
                 Price = dto.Price,
+                Mileage = dto.Mileage,
                 Description = dto.Description,
-                ImagePath = imagePath
+                ImagePath = imagePath,
+                BodyStyle = dto.BodyStyle
             };
 
             _context.CarItems.Add(car);
@@ -121,7 +123,7 @@ namespace BincomCarDealer.Controllers {
         public async Task<IActionResult> DeleteCar(int id) {
             var car = _context.CarItems.FirstOrDefault(c => c.Id == id);
             if (car != null) {
-                var filePath = car.ImagePath;
+                var filePath = Path.GetFullPath(car.ImagePath);
                 if (System.IO.File.Exists(filePath)) {
                     System.IO.File.Delete(filePath);
                 }

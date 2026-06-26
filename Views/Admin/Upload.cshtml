@@ -2,39 +2,56 @@
     ViewData["Title"] = "Upload Car";
 }
 
-<div style="max-width:500px; margin: 3rem auto; font-family: sans-serif;">
-    <h2>Upload New Car</h2>
+<div style="max-width:500px; margin: 3rem auto; font-family: sans-serif; line-height: 1.5;">
+    <h2 style="margin-bottom: 1.5rem;">Upload New Car</h2>
 
     <form method="post" asp-action="Upload" asp-controller="Admin" enctype="multipart/form-data">
         @Html.AntiForgeryToken()
 
         <div style="margin-bottom:1rem;">
-            <label>Car Name</label><br />
-            <input type="text" name="name" required style="width:100%; padding:0.5rem;" />
+            <label style="display:block; margin-bottom:0.3rem; font-weight:bold;">Make</label>
+            <input type="text" name="Make" placeholder="e.g., Toyota" required style="width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;" />
         </div>
 
         <div style="margin-bottom:1rem;">
-            <label>Brand</label><br />
-            <input type="text" name="brand" required style="width:100%; padding:0.5rem;" />
+            <label style="display:block; margin-bottom:0.3rem; font-weight:bold;">Model</label>
+            <input type="text" name="Model" placeholder="e.g., RAV4" required style="width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;" />
+        </div>
+
+        <div style="display: flex; gap: 1rem; margin-bottom:1rem;">
+            <div style="flex: 1;">
+                <label style="display:block; margin-bottom:0.3rem; font-weight:bold;">Year</label>
+                <input type="number" name="Year" min="1900" max="2027" required style="width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;" />
+            </div>
+            <div style="flex: 1;">
+                <label style="display:block; margin-bottom:0.3rem; font-weight:bold;">Body Style</label>
+                <input type="text" name="BodyStyle" placeholder="e.g., SUV, Sedan" required style="width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;" />
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 1rem; margin-bottom:1rem;">
+            <div style="flex: 1;">
+                <label style="display:block; margin-bottom:0.3rem; font-weight:bold;">Price (₦)</label>
+                <input type="number" name="Price" step="0.01" min="0" required style="width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;" />
+            </div>
+            <div style="flex: 1;">
+                <label style="display:block; margin-bottom:0.3rem; font-weight:bold;">Mileage (km)</label>
+                <input type="number" name="Mileage" min="0" required style="width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;" />
+            </div>
         </div>
 
         <div style="margin-bottom:1rem;">
-            <label>Price (₦)</label><br />
-            <input type="number" name="price" step="0.01" required style="width:100%; padding:0.5rem;" />
+            <label style="display:block; margin-bottom:0.3rem; font-weight:bold;">Description</label>
+            <textarea name="Description" rows="4" placeholder="Describe features, condition, etc..." style="width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px; box-sizing:border-box; resize:vertical;"></textarea>
         </div>
 
-        <div style="margin-bottom:1rem;">
-            <label>Description</label><br />
-            <textarea name="description" rows="4" style="width:100%; padding:0.5rem;"></textarea>
+        <div style="margin-bottom:1.5rem; background: #f8f9fa; padding: 1rem; border: 1px dashed #ccc; border-radius: 4px;">
+            <label style="display:block; margin-bottom:0.5rem; font-weight:bold;">Vehicle Image</label>
+            <input type="file" name="Image" accept="image/*" required style="font-size: 0.9rem;" />
         </div>
 
-        <div style="margin-bottom:1rem;">
-            <label>Image</label><br />
-            <input type="file" name="image" accept="image/*" required />
-        </div>
-
-        <button type="submit" style="padding:0.5rem 1.5rem;">Upload Car</button>
+        <button type="submit" style="width: 100%; padding:0.75rem; background:#28a745; color:white; border:none; border-radius:4px; font-weight:bold; font-size:1rem; cursor:pointer;">Upload Car</button>
     </form>
 
-    <p style="margin-top:1rem;"><a asp-action="Dashboard" asp-controller="Admin">&larr; Back to Dashboard</a></p>
+    <p style="margin-top:1.5rem; text-align: center;"><a asp-action="Dashboard" asp-controller="Admin" style="color:#007bff; text-decoration:none;">&larr; Back to Dashboard</a></p>
 </div>
