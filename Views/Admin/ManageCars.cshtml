@@ -1,0 +1,42 @@
+﻿@model List<BincomCarDealer.Models.CarItem>
+
+@{
+    ViewData["Title"] = "Manage Cars";
+}
+
+<div style="max-width:900px; margin: 3rem auto;">
+    <h2>Manage Cars</h2>
+
+    @if (Model.Any())
+    {
+        <table style="width:100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th style="text-align:left; border-bottom:1px solid #ccc;">Name</th>
+                    <th style="text-align:left; border-bottom:1px solid #ccc;">Brand</th>
+                    <th style="text-align:left; border-bottom:1px solid #ccc;">Price</th>
+                    <th style="text-align:left; border-bottom:1px solid #ccc;">Uploaded</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var car in Model)
+                {
+                    <tr>
+                        <td>@car.Name</td>
+                        <td>@car.Brand</td>
+                        <td>₦@car.Price.ToString("N0")</td>
+                        <td>@car.UploadedAt.ToString("MMM dd, yyyy")</td>
+                        <td> <a asp-action="DeleteCar" asp-controller="Admin" asp-route-id="@car.Id" style="display:inline-block; padding:0.5rem 1rem; background:#222; color:#fff; text-decoration:none; border-radius:6px;">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No cars uploaded yet.</p>
+    }
+</div>

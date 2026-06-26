@@ -1,0 +1,42 @@
+﻿@model List<BincomCarDealer.Models.CarInquiry>
+
+@{
+    ViewData["Title"] = "Inquiries";
+}
+
+<div style="max-width:900px; margin: 3rem auto; font-family: sans-serif;">
+    <h2>Customer Inquiries</h2>
+
+    @if (Model.Any())
+    {
+        <table style="width:100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th style="text-align:left; border-bottom:1px solid #ccc; padding:0.5rem;">Name</th>
+                    <th style="text-align:left; border-bottom:1px solid #ccc; padding:0.5rem;">Email</th>
+                    <th style="text-align:left; border-bottom:1px solid #ccc; padding:0.5rem;">Message</th>
+                    <th style="text-align:left; border-bottom:1px solid #ccc; padding:0.5rem;">Car ID</th>
+                    <th style="text-align:left; border-bottom:1px solid #ccc; padding:0.5rem;">Submitted</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var inquiry in Model)
+                {
+                    <tr>
+                        <td style="padding:0.5rem;">@inquiry.Name</td>
+                        <td style="padding:0.5rem;">@inquiry.Email</td>
+                        <td style="padding:0.5rem;">@inquiry.Message</td>
+                        <td style="padding:0.5rem;">@inquiry.CarId</td>
+                        <td style="padding:0.5rem;">@inquiry.SubmittedAt.ToString("MMM dd, yyyy")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No inquiries yet.</p>
+    }
+
+    <p style="margin-top:1rem;"><a asp-action="Dashboard" asp-controller="Admin">&larr; Back to Dashboard</a></p>
+</div>

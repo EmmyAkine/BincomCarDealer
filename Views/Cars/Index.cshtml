@@ -1,0 +1,36 @@
+﻿@model List<BincomCarDealer.Models.CarItem>
+
+@{
+    ViewData["Title"] = "Available Cars";
+}
+
+<div style="max-width:1100px; margin: 3rem auto; font-family: sans-serif;">
+    <h1>Available Cars</h1>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:1.5rem; margin-top:2rem;">
+        @if (Model.Any())
+        {
+            @foreach (var car in Model)
+            {
+                <div style="border:1px solid #ddd; border-radius:10px; overflow:hidden;">
+                    @if (!string.IsNullOrEmpty(car.ImagePath))
+                    {
+                        <img src="@car.ImagePath" alt="@car.Name" style="width:100%; height:180px; object-fit:cover;" />
+                    }
+                    <div style="padding:1rem;">
+                        <h3 style="margin:0 0 0.25rem;">@car.Name</h3>
+                        <p style="margin:0 0 0.5rem; color:#666;">@car.Brand</p>
+                        <p style="margin:0 0 1rem; font-weight:bold;">₦@car.Price.ToString("N0")</p>
+                        <a asp-action="Details" asp-controller="Cars" asp-route-id="@car.Id" style="display:inline-block; padding:0.5rem 1rem; background:#222; color:#fff; text-decoration:none; border-radius:6px;">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No cars available yet.</p>
+        }
+    </div>
+</div>

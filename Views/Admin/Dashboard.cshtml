@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div style="max-width:800px; margin: 3rem auto;">
+    <h2>Admin Dashboard</h2>
+    <p>Welcome back, Admin.</p>
+
+    <div style="display:flex; gap:1rem; margin-top:2rem; flex-wrap:wrap;">
+        <a asp-action="Upload" asp-controller="Admin" style="padding:1rem 1.5rem; border:1px solid #ccc; border-radius:8px;">
+            Upload New Car
+        </a>
+        <a asp-action="ManageCars" asp-controller="Admin" style="padding:1rem 1.5rem; border:1px solid #ccc; border-radius:8px;">
+            Manage Cars
+        </a>
+        <a asp-action="Inquiries" asp-controller="Admin" style="padding:1rem 1.5rem; border:1px solid #ccc; border-radius:8px;">
+            View Inquiries
+        </a>
+        <a asp-action="Logout" asp-controller="Admin" style="padding:1rem 1.5rem; border:1px solid #ccc; border-radius:8px;">
+            Log Out
+        </a>
+    </div>
+</div>

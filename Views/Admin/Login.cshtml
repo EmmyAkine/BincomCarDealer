@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Admin Login";
+}
+
+<div style="max-width:400px; margin: 5rem auto; font-family: sans-serif;">
+    <h2>Admin Login</h2>
+
+    @if (ViewBag.Error != null)
+    {
+        <p style="color:red;">@ViewBag.Error</p>
+    }
+
+    <form method="post" asp-action="Login" asp-controller="Admin">
+        @Html.AntiForgeryToken()
+        <div style="margin-bottom:1rem;">
+            <label>Username</label><br />
+            <input type="text" name="username" required style="width:100%; padding:0.5rem;" />
+        </div>
+        <div style="margin-bottom:1rem;">
+            <label>Password</label><br />
+            <input type="password" name="password" required style="width:100%; padding:0.5rem;" />
+        </div>
+        <button type="submit" style="padding:0.5rem 1.5rem;">Log In</button>
+    </form>
+</div>

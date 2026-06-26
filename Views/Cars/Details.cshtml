@@ -1,0 +1,55 @@
+﻿@model BincomCarDealer.Models.CarItem
+
+@{
+    ViewData["Title"] = Model.Name;
+    bool showSuccess = TempData["InquirySuccess"] != null;
+}
+
+<div style="max-width:700px; margin: 3rem auto; font-family: sans-serif;">
+
+    @if (!string.IsNullOrEmpty(Model.ImagePath))
+    {
+        <img src="@Model.ImagePath" alt="@Model.Name" style="width:100%; max-height:350px; object-fit:cover; border-radius:10px;" />
+    }
+
+    <h1 style="margin-top:1rem;">@Model.Name</h1>
+    <p style="color:#666;">@Model.Brand</p>
+    <p style="font-size:1.3rem; font-weight:bold;">₦@Model.Price.ToString("N0")</p>
+    <p>@Model.Description</p>
+
+    <hr style="margin:2rem 0;" />
+
+    @if (showSuccess)
+    {
+        <div style="padding:1rem; background:#e6ffed; border:1px solid #4caf50; border-radius:8px;">
+            <strong>Inquiry sent!</strong> We'll get back to you soon.
+        </div>
+    }
+    else
+    {
+        <h3>Interested in this car?</h3>
+        <form method="post" asp-action="Inquire" asp-controller="Cars">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="carId" value="@Model.Id" />
+
+            <div style="margin-bottom:1rem;">
+                <label>Your Name</label><br />
+                <input type="text" name="name" required style="width:100%; padding:0.5rem;" />
+            </div>
+
+            <div style="margin-bottom:1rem;">
+                <label>Your Email</label><br />
+                <input type="email" name="email" required style="width:100%; padding:0.5rem;" />
+            </div>
+
+            <div style="margin-bottom:1rem;">
+                <label>Message</label><br />
+                <textarea name="message" rows="4" required style="width:100%; padding:0.5rem;"></textarea>
+            </div>
+
+            <button type="submit" style="padding:0.5rem 1.5rem;">Send Inquiry</button>
+        </form>
+    }
+
+    <p style="margin-top:1.5rem;"><a asp-action="Index" asp-controller="Cars">&larr; Back to all cars</a></p>
+</div>
