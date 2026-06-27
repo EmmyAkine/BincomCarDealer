@@ -14,7 +14,8 @@ namespace BincomCarDealer {
                 options => {
                     options.LoginPath = "/Admin/Login";
                     options.AccessDeniedPath = "/Admin/Login";
-                    options.ExpireTimeSpan = TimeSpan.FromHours(2);
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                    options.SlidingExpiration = true;
                 }
             );
 
@@ -35,11 +36,15 @@ namespace BincomCarDealer {
             }
 
             //Create the static file path needed for uploads
-            var uploadsPath = Path.Combine(Environment.GetEnvironmentVariable("HOME")!, "data", "uploads");
-            Directory.CreateDirectory(uploadsPath);
+            var uploadsPath = Environment.GetEnvironmentVariable("HOME") != null
+                ? Path.Combine(Environment.GetEnvironmentVariable("HOME")!, "data", "uploads")
+                : Path.Combine(app.Environment.WebRootPath, "uploads");
+
+            Directory.CreateDirectory(uploadsPath); 
+            //Console.WriteLine($"Uploads target directory: {uploadsPath}");
 
             app.UseStaticFiles(new StaticFileOptions {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Environment.GetEnvironmentVariable("HOME")!, "data", "uploads")),
+                FileProvider = new PhysicalFileProvider(uploadsPath),
                 RequestPath = "/uploads"
             });
 

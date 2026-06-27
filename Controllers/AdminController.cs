@@ -10,16 +10,17 @@ using System.Security.Claims;
 namespace BincomCarDealer.Controllers {
     public class AdminController : Controller {
 
-        private const string AdminUsername = "admin";
-        private const string AdminPassword = "Bincom2026!";
+
+        private readonly IConfiguration _configuration;
 
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _env;
 
 
-        public AdminController(AppDbContext context, IWebHostEnvironment environment) {
+        public AdminController(AppDbContext context, IWebHostEnvironment environment, IConfiguration configuration) {
             _context = context;
             _env = environment;
+            _configuration = configuration;
         }
 
         public IActionResult Index() {
@@ -35,16 +36,29 @@ namespace BincomCarDealer.Controllers {
 
         [HttpPost]
         public async Task<IActionResult> Login([FromForm] CreateLoginRequestDto dto) {
-            if (dto.Username == AdminUsername && dto.Password == AdminPassword) {
-                var claims = new List<Claim>
-                {
+
+            string? expectedUsername = _configuration["AdminSettings:Username"];
+            string? expectedPassword = _configuration["AdminSettings:Password"];
+
+            if (string.IsNullOrEmpty(expectedUsername) || string.IsNullOrEmpty(expectedPassword)) {
+                ModelState.AddModelError("", "Authentication service is temporarily unavailable. Please check server configuration.");
+
+                ViewBag.Error = "Authentication service is temporarily unavailable.";
+                return View(dto);
+            }
+
+            if (dto.Username == expectedUsername && dto.Password == expectedPassword) {
+                var claims = new List<Claim> {
                     new Claim(ClaimTypes.Name, dto.Username)
+                };
+                var authProperties = new AuthenticationProperties {
+                    IsPersistent = false 
                 };
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var principal = new ClaimsPrincipal(identity);
 
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, authProperties);
 
                 return RedirectToAction("Dashboard");
             }
