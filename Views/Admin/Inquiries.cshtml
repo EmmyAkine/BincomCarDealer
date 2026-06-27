@@ -24,9 +24,15 @@
                 {
                     <tr>
                         <td style="padding:0.5rem;">@inquiry.Name</td>
-                        <td style="padding:0.5rem;">@inquiry.Email</td>
+                        <td style="padding:0.75rem; vertical-align: top;"><a href="mailto:@inquiry.Email" style="color: #007bff; text-decoration: none;">@inquiry.Email</a></td>
                         <td style="padding:0.5rem;">@inquiry.Message</td>
-                        <td style="padding:0.5rem;">@inquiry.CarId</td>
+
+                        <td style="padding:0.75rem; vertical-align: top; white-space: nowrap;">
+                            <a asp-action="Details" asp-controller="Cars" asp-route-id="@inquiry.CarId" target="_blank" rel="noopener" style="color: #28a745; text-decoration: none; font-weight: bold; font-size: 0.9rem;">
+                                View Car (#@inquiry.CarId) ↗
+                            </a>
+                        </td>
+
                         <td style="padding:0.5rem;">@inquiry.SubmittedAt.ToString("MMM dd, yyyy")</td>
                     </tr>
                 }

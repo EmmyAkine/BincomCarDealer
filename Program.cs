@@ -1,6 +1,7 @@
 using BincomCarDealer.Data;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 namespace BincomCarDealer {
     public class Program {
@@ -32,6 +33,15 @@ namespace BincomCarDealer {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            //Create the static file path needed for uploads
+            var uploadsPath = Path.Combine(Environment.GetEnvironmentVariable("HOME")!, "data", "uploads");
+            Directory.CreateDirectory(uploadsPath);
+
+            app.UseStaticFiles(new StaticFileOptions {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Environment.GetEnvironmentVariable("HOME")!, "data", "uploads")),
+                RequestPath = "/uploads"
+            });
 
             app.UseSwagger();
             app.UseSwaggerUI();

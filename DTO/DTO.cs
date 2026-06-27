@@ -38,5 +38,28 @@ namespace BincomCarDealer.DTO {
         public string Password { get; set; } = ""; 
     }
 
+    public class EditCarDto {
+        [Required] 
+        public string Make { get; set; } = "";
+
+        [Required] 
+        public string Model { get; set; } = "";
+
+        [Range(1900, 2027)] 
+        public int Year { get; set; }
+
+        [Range(0, double.MaxValue)] 
+        public decimal Price { get; set; }
+
+        [Range(0, int.MaxValue)] 
+        public int Mileage { get; set; }
+
+        [Required] 
+        public string BodyStyle { get; set; } = "";
+
+        public string Description { get; set; } = "";
+
+        public IFormFile? Image { get; set; }
+    }
 
 }

@@ -80,20 +80,7 @@ namespace BincomCarDealer.Controllers {
             string imagePath = "";
 
             if (dto.Image != null && dto.Image.Length > 0) {
-                var fileName = Guid.NewGuid() + Path.GetExtension(dto.Image.FileName);
-                var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads");
-
-                if (!Directory.Exists(uploadsFolder)) {
-                    Directory.CreateDirectory(uploadsFolder);
-                }
-
-                var filePath = Path.Combine(uploadsFolder, fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create)) {
-                    await dto.Image.CopyToAsync(stream);
-                }
-
-                imagePath = "/uploads/" + fileName;
+                imagePath = await UploadImageAndReturnImagePath(dto.Image, _env);
             }
             var car = new CarItem {
                 Year = dto.Year,
@@ -122,21 +109,108 @@ namespace BincomCarDealer.Controllers {
         [Authorize]
         public async Task<IActionResult> DeleteCar(int id) {
             var car = _context.CarItems.FirstOrDefault(c => c.Id == id);
-            if (car != null) {
-                var filePath = Path.GetFullPath(car.ImagePath);
-                if (System.IO.File.Exists(filePath)) {
-                    System.IO.File.Delete(filePath);
-                }
-                _context.CarItems.Remove(car);
-                await _context.SaveChangesAsync();
+
+            if (car == null) { return NotFound(); }
+
+            if (!string.IsNullOrEmpty(car.ImagePath)) {
+                DeleteImageFile(car.ImagePath, _env);
             }
+
+            _context.CarItems.Remove(car);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("ManageCars");
+        }   
+
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> EditCarDetails(int id) {
+            var car = _context.CarItems.FirstOrDefault(c => c.Id == id);
+            if(car == null) {
+                return NotFound();
+            }
+            return View(car);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> EditCarDetails(int id, [FromForm] EditCarDto dto) {
+            var car = _context.CarItems.FirstOrDefault(c => c.Id == id);
+            if (car == null) {
+                return NotFound();
+            }
+
+            car.Year = dto.Year;
+            car.Make = dto.Make;
+            car.Model = dto.Model;
+            car.Price = dto.Price;
+            car.Mileage = dto.Mileage;
+            car.Description = dto.Description;
+            car.BodyStyle = dto.BodyStyle;
+
+            if(dto.Image != null && dto.Image.Length > 0) {
+                //Delete the old Image file
+                if (!string.IsNullOrEmpty(car.ImagePath)) {
+                    DeleteImageFile(car.ImagePath, _env);
+                }
+                //Upload new image file, overwrite old image path to new image path
+                car.ImagePath = await UploadImageAndReturnImagePath(dto.Image, _env);
+            }
+
+            await _context.SaveChangesAsync();
+
             return RedirectToAction("ManageCars");
         }
+
+
+        //Inquires..............
 
         [Authorize]
         public IActionResult Inquiries() {
             var inquiries = _context.CarInquiries.OrderByDescending(i => i.SubmittedAt).ToList();
             return View(inquiries);
+        }
+
+
+        private static async Task<string> UploadImageAndReturnImagePath(IFormFile imageFile, IWebHostEnvironment environment) {
+            
+            ArgumentNullException.ThrowIfNull(imageFile);
+
+            if (imageFile.Length == 0) {
+                throw new ArgumentException("Uploaded file cannot be empty.", nameof(imageFile));
+            }
+
+            var fileName = Guid.NewGuid() + Path.GetExtension(imageFile.FileName);
+            string uploadsFolder = Environment.GetEnvironmentVariable("HOME") != null
+                ? Path.Combine(Environment.GetEnvironmentVariable("HOME")!, "data", "uploads")
+                : Path.Combine(environment.WebRootPath, "uploads");
+
+            Directory.CreateDirectory(uploadsFolder);
+
+            var filePath = Path.Combine(uploadsFolder, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create)) {
+                await imageFile.CopyToAsync(stream);
+            }
+
+            var imagePath = "/uploads/" + fileName;
+            return imagePath;
+        }
+
+        private static void DeleteImageFile(string imagePath, IWebHostEnvironment environment) {
+            ArgumentException.ThrowIfNullOrEmpty(imagePath);
+
+            string uploadsFolder = Environment.GetEnvironmentVariable("HOME") != null
+                ? Path.Combine(Environment.GetEnvironmentVariable("HOME")!, "data", "uploads")
+                : Path.Combine(environment.WebRootPath, "uploads");
+
+            string fileName = Path.GetFileName(imagePath);
+            string physicalPath = Path.Combine(uploadsFolder, fileName);
+
+            // Fail-safe check: only attempt deletion if the file physically exists on disk
+            if (System.IO.File.Exists(physicalPath)) {
+                System.IO.File.Delete(physicalPath);
+            }
         }
     }
 }

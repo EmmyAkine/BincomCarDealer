@@ -5,7 +5,8 @@
 }
 
 <style>
-    /* When the checkbox is checked, hide the initial delete button */
+    /* When the checkbox is checked, hide the edit and initial delete buttons */
+    .delete-checkbox:checked ~ .edit-btn,
     .delete-checkbox:checked ~ .init-delete-btn {
         display: none !important;
     }
@@ -41,8 +42,12 @@
                         <td style="padding: 0.75rem; vertical-align: middle;">@car.Model</td>
                         <td style="padding: 0.75rem; vertical-align: middle; font-weight: bold; color: #2e7d32;">₦@car.Price.ToString("N0")</td>
                         <td style="padding: 0.75rem; vertical-align: middle; color: #666;">@car.UploadedAt.ToString("MMM dd, yyyy")</td>
-                        <td style="padding: 0.75rem; vertical-align: middle; min-width: 140px;">
+                        <td style="padding: 0.75rem; vertical-align: middle; min-width: 180px;">
                             <input type="checkbox" id="confirm-@car.Id" class="delete-checkbox" style="display: none;" />
+
+                            <a asp-action="EditCarDetails" asp-controller="Admin" asp-route-id="@car.Id" class="edit-btn" style="display:inline-block; padding:0.4rem 0.8rem; background:#007bff; color:#fff; text-decoration:none; border-radius:4px; font-size: 0.9rem; font-weight: bold; margin-right: 0.3rem;">
+                                Edit
+                            </a>
 
                             <label for="confirm-@car.Id" class="init-delete-btn" style="display:inline-block; padding:0.4rem 0.8rem; background:#dc3545; color:#fff; border-radius:4px; font-size: 0.9rem; font-weight: bold; cursor:pointer; user-select: none;">
                                 Delete
@@ -71,7 +76,6 @@
             <p style="margin: 0;">No cars uploaded yet.</p>
         </div>
     }
-
     
     <p style="margin-top:1rem;"><a asp-action="Dashboard" asp-controller="Admin">&larr; Back to Dashboard</a></p>
 </div>
