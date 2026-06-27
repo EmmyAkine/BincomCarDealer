@@ -6,58 +6,79 @@
     bool showSuccess = TempData["InquirySuccess"] != null;
 }
 
-<div style="max-width:700px; margin: 3rem auto; font-family: sans-serif; line-height: 1.5;">
+<div class="wrap">
+    <a href="@Url.Action("Index", "Cars")" class="back-link" style="margin-top:1.5rem;">
+        <i class="bi bi-arrow-left"></i> Back to inventory
+    </a>
 
-    @if (!string.IsNullOrEmpty(Model.ImagePath))
-    {
-        <img src="@Model.ImagePath" alt="@carTitle" style="width:100%; max-height:350px; object-fit:cover; border-radius:10px;" />
-    }
-
-    <h1 style="margin-top:1rem; margin-bottom:0.2rem;">@carTitle</h1>
-    
-    <p style="color:#666; margin-top:0; font-size:1.1rem;">
-        @Model.BodyStyle &nbsp;|&nbsp; @Model.Mileage.ToString("N0") km
-    </p>
-    
-    <p style="font-size:1.6rem; font-weight:bold; color:#2e7d32; margin: 1rem 0;">₦@Model.Price.ToString("N0")</p>
-    
-    <div style="background:#f9f9f9; padding:1rem; border-radius:8px; margin-bottom:2rem;">
-        <p style="margin:0; white-space: pre-line;">@Model.Description</p>
-    </div>
-
-    <hr style="margin:2rem 0; border:0; border-top:1px solid #ddd;" />
-
-    @if (showSuccess)
-    {
-        <div style="padding:1rem; background:#e6ffed; border:1px solid #4caf50; border-radius:8px;">
-            <strong>Inquiry sent!</strong> We'll get back to you soon.
+    <div class="details-grid">
+        <div>
+            <div class="details-photo">
+                @if (!string.IsNullOrEmpty(Model.ImagePath))
+                {
+                    <img src="@Model.ImagePath" alt="@carTitle" />
+                }
+            </div>
         </div>
-    }
-    else
-    {
-        <h3 style="margin-bottom:1rem;">Interested in this car?</h3>
-        <form method="post" asp-action="Inquire" asp-controller="Cars">
-            @Html.AntiForgeryToken()
-            <input type="hidden" name="carId" value="@Model.Id" />
 
-            <div style="margin-bottom:1rem;">
-                <label style="display:block; margin-bottom:0.3rem; font-weight:bold;">Your Name</label>
-                <input type="text" name="name" required style="width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;" />
+        <div>
+            <h1 class="details-title">@carTitle</h1>
+            <p class="details-sub">@Model.BodyStyle</p>
+
+            <div class="spec-strip large">
+                <div class="spec-cell">
+                    <span class="spec-label">Year</span>
+                    <span class="spec-value">@Model.Year</span>
+                </div>
+                <div class="spec-cell">
+                    <span class="spec-label">Mileage</span>
+                    <span class="spec-value">@Model.Mileage.ToString("N0") km</span>
+                </div>
+                <div class="spec-cell price">
+                    <span class="spec-label">Price</span>
+                    <span class="spec-value">₦@Model.Price.ToString("N0")</span>
+                </div>
             </div>
 
-            <div style="margin-bottom:1rem;">
-                <label style="display:block; margin-bottom:0.3rem; font-weight:bold;">Your Email</label>
-                <input type="email" name="email" required style="width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;" />
+            <div class="details-desc">@Model.Description</div>
+
+            <div class="inquiry-box">
+                @if (showSuccess)
+                {
+                    <div class="success-box">
+                        <i class="bi bi-check-circle-fill ic"></i>
+                        <div>
+                            <strong>Inquiry sent</strong>
+                            <p>We'll get back to you about the @Model.Make @Model.Model soon.</p>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <h3>Interested in this car?</h3>
+                    <form method="post" asp-action="Inquire" asp-controller="Cars">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="carId" value="@Model.Id" />
+
+                        <div class="field">
+                            <label for="name">Your name</label>
+                            <input type="text" id="name" name="name" required />
+                        </div>
+                        <div class="field">
+                            <label for="email">Your email</label>
+                            <input type="email" id="email" name="email" required />
+                        </div>
+                        <div class="field">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="4" required placeholder="Ask about availability, financing, or schedule a viewing..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-accent btn-block">
+                            <i class="bi bi-send"></i> Send inquiry
+                        </button>
+                    </form>
+                }
             </div>
-
-            <div style="margin-bottom:1rem;">
-                <label style="display:block; margin-bottom:0.3rem; font-weight:bold;">Message</label>
-                <textarea name="message" rows="4" required style="width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px; box-sizing:border-box; resize:vertical;"></textarea>
-            </div>
-
-            <button type="submit" style="padding:0.7rem 2rem; background:#007bff; color:white; border:none; border-radius:4px; font-weight:bold; cursor:pointer;">Send Inquiry</button>
-        </form>
-    }
-
-    <p style="margin-top:2rem;"><a asp-action="Index" asp-controller="Cars" style="color:#007bff; text-decoration:none;">&larr; Back to all cars</a></p>
+        </div>
+    </div>
 </div>

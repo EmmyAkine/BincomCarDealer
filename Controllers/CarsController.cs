@@ -2,6 +2,7 @@
 using BincomCarDealer.DTO;
 using BincomCarDealer.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace BincomCarDealer.Controllers {
     public class CarsController : Controller {
@@ -44,6 +45,13 @@ namespace BincomCarDealer.Controllers {
 
             TempData["InquirySuccess"] = true;
             return RedirectToAction("Details", new { id = inquiryFormDto.CarId });
+        }
+
+        //Error........
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error() {
+            // This creates the model that Shared/Error.cshtml expects
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

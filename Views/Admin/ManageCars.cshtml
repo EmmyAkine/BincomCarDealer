@@ -4,78 +4,69 @@
     ViewData["Title"] = "Manage Cars";
 }
 
-<style>
-    /* When the checkbox is checked, hide the edit and initial delete buttons */
-    .delete-checkbox:checked ~ .edit-btn,
-    .delete-checkbox:checked ~ .init-delete-btn {
-        display: none !important;
-    }
-    
-    /* When the checkbox is checked, show the confirmation controls */
-    .delete-checkbox:checked ~ .confirm-controls {
-        display: inline-block !important;
-    }
-</style> 
+<div class="wrap">
+    <a href="@Url.Action("Dashboard", "Admin")" class="back-link" style="margin-top:1.5rem;">
+        <i class="bi bi-arrow-left"></i> Back to dashboard
+    </a>
 
-<div style="max-width:900px; margin: 3rem auto; font-family: sans-serif;">
-    <h2 style="margin-bottom: 1.5rem;">Manage Cars</h2>
+    <div class="page-head" style="padding-top:0;">
+        <p class="kicker">Inventory</p>
+        <h1>Manage cars</h1>
+    </div>
 
-    @if (Model.Any())
-    {
-        <table style="width:100%; border-collapse: collapse;">
-            <thead>
-                <tr style="background-color: #f8f9fa;">
-                    <th style="text-align:left; padding: 0.75rem; border-bottom:2px solid #dee2e6;">Year</th>
-                    <th style="text-align:left; padding: 0.75rem; border-bottom:2px solid #dee2e6;">Make</th>
-                    <th style="text-align:left; padding: 0.75rem; border-bottom:2px solid #dee2e6;">Model</th>
-                    <th style="text-align:left; padding: 0.75rem; border-bottom:2px solid #dee2e6;">Price</th>
-                    <th style="text-align:left; padding: 0.75rem; border-bottom:2px solid #dee2e6;">Uploaded</th>
-                    <th style="text-align:left; padding: 0.75rem; border-bottom:2px solid #dee2e6;">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var car in Model)
-                {
-                    <tr style="border-bottom: 1px solid #dee2e6;">
-                        <td style="padding: 0.75rem; vertical-align: middle;">@car.Year</td>
-                        <td style="padding: 0.75rem; vertical-align: middle;">@car.Make</td>
-                        <td style="padding: 0.75rem; vertical-align: middle;">@car.Model</td>
-                        <td style="padding: 0.75rem; vertical-align: middle; font-weight: bold; color: #2e7d32;">₦@car.Price.ToString("N0")</td>
-                        <td style="padding: 0.75rem; vertical-align: middle; color: #666;">@car.UploadedAt.ToString("MMM dd, yyyy")</td>
-                        <td style="padding: 0.75rem; vertical-align: middle; min-width: 180px;">
-                            <input type="checkbox" id="confirm-@car.Id" class="delete-checkbox" style="display: none;" />
-
-                            <a asp-action="EditCarDetails" asp-controller="Admin" asp-route-id="@car.Id" class="edit-btn" style="display:inline-block; padding:0.4rem 0.8rem; background:#007bff; color:#fff; text-decoration:none; border-radius:4px; font-size: 0.9rem; font-weight: bold; margin-right: 0.3rem;">
-                                Edit
-                            </a>
-
-                            <label for="confirm-@car.Id" class="init-delete-btn" style="display:inline-block; padding:0.4rem 0.8rem; background:#dc3545; color:#fff; border-radius:4px; font-size: 0.9rem; font-weight: bold; cursor:pointer; user-select: none;">
-                                Delete
-                            </label>
-
-                            <span class="confirm-controls" style="display:none;">
-                                <span style="font-size:0.85rem; font-weight:bold; color:#dc3545; margin-right:0.4rem;">Sure?</span>
-        
-                                <a asp-action="DeleteCar" asp-controller="Admin" asp-route-id="@car.Id" style="display:inline-block; padding:0.3rem 0.6rem; background:#28a745; color:#fff; text-decoration:none; border-radius:4px; font-size: 0.85rem; font-weight: bold; margin-right:0.2rem;">
-                                    Yes
-                                </a>
-        
-                                <label for="confirm-@car.Id" style="display:inline-block; padding:0.3rem 0.6rem; background:#6c757d; color:#fff; border-radius:4px; font-size: 0.85rem; font-weight: bold; cursor:pointer; user-select: none;">
-                                    No
-                                </label>
-                            </span>
-                        </td>
+    <div class="admin-table-wrap">
+        @if (Model.Any())
+        {
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Price</th>
+                        <th>Uploaded</th>
+                        <th>Actions</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <div style="padding: 2rem; background: #f8f9fa; border-radius: 8px; text-align: center; color: #666;">
-            <p style="margin: 0;">No cars uploaded yet.</p>
-        </div>
-    }
-    
-    <p style="margin-top:1rem;"><a asp-action="Dashboard" asp-controller="Admin">&larr; Back to Dashboard</a></p>
+                </thead>
+                <tbody>
+                    @foreach (var car in Model)
+                    {
+                        <tr>
+                            <td class="num-cell">@car.Year</td>
+                            <td>@car.Make</td>
+                            <td>@car.Model</td>
+                            <td class="price-cell">₦@car.Price.ToString("N0")</td>
+                            <td class="num-cell">@car.UploadedAt.ToString("MMM dd, yyyy")</td>
+                            <td>
+                                <input type="checkbox" id="confirm-@car.Id" class="delete-check" style="display:none;" />
+
+                                <div class="row-actions">
+                                    <span class="normal-actions" style="display:flex; gap:0.4rem;">
+                                        <a href="@Url.Action("EditCarDetails", "Admin", new { id = car.Id })" class="btn btn-ghost btn-sm">Edit</a>
+                                        <label for="confirm-@car.Id" class="btn btn-danger btn-sm" style="cursor:pointer;">Delete</label>
+                                    </span>
+
+                                    <span class="confirm-delete">
+                                        <span class="confirm-label">Sure?</span>
+                                        <a href="@Url.Action("DeleteCar", "Admin", new { id = car.Id })" class="btn btn-accent btn-sm">Yes</a>
+                                        <label for="confirm-@car.Id" class="btn btn-ghost btn-sm" style="cursor:pointer;">No</label>
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <table class="admin-table">
+                <tbody>
+                    <tr class="empty-table-row">
+                        <td colspan="6">No cars uploaded yet.</td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    </div>
 </div>

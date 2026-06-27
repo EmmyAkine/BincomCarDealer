@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using System.Security.Claims;
 
 namespace BincomCarDealer.Controllers {
@@ -138,7 +139,7 @@ namespace BincomCarDealer.Controllers {
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> EditCarDetails(int id) {
+        public IActionResult EditCarDetails(int id) {
             var car = _context.CarItems.FirstOrDefault(c => c.Id == id);
             if(car == null) {
                 return NotFound();
@@ -183,6 +184,13 @@ namespace BincomCarDealer.Controllers {
         public IActionResult Inquiries() {
             var inquiries = _context.CarInquiries.OrderByDescending(i => i.SubmittedAt).ToList();
             return View(inquiries);
+        }
+
+        //Error........
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error() {
+            // This creates the model that Shared/Error.cshtml expects
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
 

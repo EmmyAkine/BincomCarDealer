@@ -4,45 +4,56 @@
     ViewData["Title"] = "Inquiries";
 }
 
-<div style="max-width:900px; margin: 3rem auto; font-family: sans-serif;">
-    <h2>Customer Inquiries</h2>
+<div class="wrap">
+    <a href="@Url.Action("Dashboard", "Admin")" class="back-link" style="margin-top:1.5rem;">
+        <i class="bi bi-arrow-left"></i> Back to dashboard
+    </a>
 
-    @if (Model.Any())
-    {
-        <table style="width:100%; border-collapse: collapse;">
-            <thead>
-                <tr>
-                    <th style="text-align:left; border-bottom:1px solid #ccc; padding:0.5rem;">Name</th>
-                    <th style="text-align:left; border-bottom:1px solid #ccc; padding:0.5rem;">Email</th>
-                    <th style="text-align:left; border-bottom:1px solid #ccc; padding:0.5rem;">Message</th>
-                    <th style="text-align:left; border-bottom:1px solid #ccc; padding:0.5rem;">Car ID</th>
-                    <th style="text-align:left; border-bottom:1px solid #ccc; padding:0.5rem;">Submitted</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var inquiry in Model)
-                {
+    <div class="page-head" style="padding-top:0;">
+        <p class="kicker">Customer Activity</p>
+        <h1>Inquiries</h1>
+    </div>
+
+    <div class="admin-table-wrap">
+        @if (Model.Any())
+        {
+            <table class="admin-table">
+                <thead>
                     <tr>
-                        <td style="padding:0.5rem;">@inquiry.Name</td>
-                        <td style="padding:0.75rem; vertical-align: top;"><a href="mailto:@inquiry.Email" style="color: #007bff; text-decoration: none;">@inquiry.Email</a></td>
-                        <td style="padding:0.5rem;">@inquiry.Message</td>
-
-                        <td style="padding:0.75rem; vertical-align: top; white-space: nowrap;">
-                            <a asp-action="Details" asp-controller="Cars" asp-route-id="@inquiry.CarId" target="_blank" rel="noopener" style="color: #28a745; text-decoration: none; font-weight: bold; font-size: 0.9rem;">
-                                View Car (#@inquiry.CarId) ↗
-                            </a>
-                        </td>
-
-                        <td style="padding:0.5rem;">@inquiry.SubmittedAt.ToString("MMM dd, yyyy")</td>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Message</th>
+                        <th>Car</th>
+                        <th>Submitted</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <p>No inquiries yet.</p>
-    }
-
-    <p style="margin-top:1rem;"><a asp-action="Dashboard" asp-controller="Admin">&larr; Back to Dashboard</a></p>
+                </thead>
+                <tbody>
+                    @foreach (var inquiry in Model)
+                    {
+                        <tr>
+                            <td>@inquiry.Name</td>
+                            <td><a href="mailto:@inquiry.Email" class="mail-link">@inquiry.Email</a></td>
+                            <td style="max-width:280px;">@inquiry.Message</td>
+                            <td>
+                                <a href="@Url.Action("Details", "Cars", new { id = inquiry.CarId })" target="_blank" rel="noopener" class="mail-link">
+                                    #@inquiry.CarId <i class="bi bi-box-arrow-up-right" style="font-size:0.7rem;"></i>
+                                </a>
+                            </td>
+                            <td class="num-cell">@inquiry.SubmittedAt.ToString("MMM dd, yyyy")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <table class="admin-table">
+                <tbody>
+                    <tr class="empty-table-row">
+                        <td colspan="5">No inquiries yet.</td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    </div>
 </div>

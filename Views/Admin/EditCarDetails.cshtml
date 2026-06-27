@@ -1,72 +1,87 @@
 ﻿@model BincomCarDealer.Models.CarItem
 
 @{
-    ViewData["Title"] = "Edit Car Details";
+    ViewData["Title"] = "Edit Car";
 }
 
-<div style="max-width:600px; margin: 3rem auto; font-family: sans-serif;">
-    <h2 style="margin-bottom: 1.5rem;">Edit Car Details</h2>
+<div class="wrap">
+    <a href="@Url.Action("ManageCars", "Admin")" class="back-link" style="margin-top:1.5rem;">
+        <i class="bi bi-arrow-left"></i> Back to manage cars
+    </a>
 
-    <form asp-action="EditCarDetails" method="post" enctype="multipart/form-data" style="background: #f8f9fa; padding: 2rem; border-radius: 8px; border: 1px solid #dee2e6;">
-        
-        <input type="hidden" asp-for="Id" />
-        <input type="hidden" asp-for="ImagePath" />
-        <input type="hidden" asp-for="UploadedAt" />
+    <div class="page-head" style="padding-top:0;">
+        <p class="kicker">Editing #@Model.Id</p>
+        <h1>@Model.Year @Model.Make @Model.Model</h1>
+    </div>
 
-        <div style="margin-bottom: 1.25rem;">
-            <label asp-for="Make" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Make</label>
-            <input asp-for="Make" style="width: 100%; padding: 0.6rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" />
-            <span asp-validation-for="Make" style="color: #dc3545; font-size: 0.85rem; display: block; margin-top: 0.25rem;"></span>
-        </div>
+    <div class="form-card" style="max-width:560px; margin-bottom:3rem;">
+        <form asp-action="EditCarDetails" asp-controller="Admin" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="ImagePath" />
+            <input type="hidden" asp-for="UploadedAt" />
 
-        <div style="margin-bottom: 1.25rem;">
-            <label asp-for="Model" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Model</label>
-            <input asp-for="Model" style="width: 100%; padding: 0.6rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" />
-            <span asp-validation-for="Model" style="color: #dc3545; font-size: 0.85rem; display: block; margin-top: 0.25rem;"></span>
-        </div>
-
-        <div style="margin-bottom: 1.25rem;">
-            <label asp-for="Year" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Year</label>
-            <input asp-for="Year" type="number" style="width: 100%; padding: 0.6rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" />
-            <span asp-validation-for="Year" style="color: #dc3545; font-size: 0.85rem; display: block; margin-top: 0.25rem;"></span>
-        </div>
-
-        <div style="margin-bottom: 1.25rem;">
-            <label asp-for="Price" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Price (₦)</label>
-            <input asp-for="Price" type="number" step="0.01" style="width: 100%; padding: 0.6rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" />
-            <span asp-validation-for="Price" style="color: #dc3545; font-size: 0.85rem; display: block; margin-top: 0.25rem;"></span>
-        </div>
-
-        <div style="margin-bottom: 1.25rem;">
-            <label asp-for="Description" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Description</label>
-            <textarea asp-for="Description" rows="4" style="width: 100%; padding: 0.6rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: sans-serif; resize: vertical;"></textarea>
-            <span asp-validation-for="Description" style="color: #dc3545; font-size: 0.85rem; display: block; margin-top: 0.25rem;"></span>
-        </div>
-
-        @if (!string.IsNullOrEmpty(Model.ImagePath))
-        {
-            <div style="margin-bottom: 1.25rem;">
-                <label style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Current Image</label>
-                <img src="@Model.ImagePath" alt="Current Car Image" style="max-width: 100%; max-height: 180px; display: block; border-radius: 4px; border: 1px solid #dee2e6; margin-bottom: 0.5rem;" />
+            <div class="field-row">
+                <div class="field">
+                    <label asp-for="Make">Make</label>
+                    <input asp-for="Make" />
+                </div>
+                <div class="field">
+                    <label asp-for="Model">Model</label>
+                    <input asp-for="Model" />
+                </div>
             </div>
-        }
 
-        <div style="margin-bottom: 2rem;">
-            <label style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Change Image (Optional)</label>
-            <input type="file" name="Image" accept="image/*" style="display: block; font-size: 0.9rem;" />
-            <small style="color: #666; display: block; margin-top: 0.4rem; font-style: italic;">
-                Leave this empty if you want to keep using the current image shown above.
-            </small>
-        </div>
+            <div class="field-row">
+                <div class="field">
+                    <label asp-for="Year">Year</label>
+                    <input asp-for="Year" type="number" min="1900" max="2027" />
+                </div>
+                <div class="field">
+                    <label asp-for="BodyStyle">Body style</label>
+                    <input asp-for="BodyStyle" />
+                </div>
+            </div>
 
-        <div style="display: flex; gap: 0.5rem;">
-            <button type="submit" style="padding: 0.6rem 1.2rem; background: #007bff; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.95rem;">
-                Save Changes
-            </button>
-            
-            <a asp-action="ManageCars" asp-controller="Admin" style="display: inline-block; padding: 0.6rem 1.2rem; background: #6c757d; color: #fff; text-decoration: none; border-radius: 4px; font-weight: bold; text-align: center; font-size: 0.95rem;">
-                Cancel
-            </a>
-        </div>
-    </form>
+            <div class="field-row">
+                <div class="field">
+                    <label asp-for="Price">Price (₦)</label>
+                    <input asp-for="Price" type="number" step="0.01" min="0" />
+                </div>
+                <div class="field">
+                    <label asp-for="Mileage">Mileage (km)</label>
+                    <input asp-for="Mileage" type="number" min="0" />
+                </div>
+            </div>
+
+            <div class="field">
+                <label asp-for="Description">Description</label>
+                <textarea asp-for="Description" rows="4"></textarea>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.ImagePath))
+            {
+                <div class="current-image">
+                    <label>Current photo</label>
+                    <img src="@Model.ImagePath" alt="Current vehicle photo" />
+                </div>
+            }
+
+            <div class="field">
+                <label>Replace photo</label>
+                <div class="file-drop">
+                    <input type="file" name="Image" accept="image/*" />
+                    <span class="hint">Leave empty to keep the current photo.</span>
+                </div>
+            </div>
+
+            <div style="display:flex; gap:0.6rem;">
+                <button type="submit" class="btn btn-accent" style="flex:1;">
+                    <i class="bi bi-check2"></i> Save changes
+                </button>
+                <a href="@Url.Action("ManageCars", "Admin")" class="btn btn-ghost" style="flex:1; text-align:center;">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
