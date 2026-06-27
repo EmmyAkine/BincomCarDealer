@@ -36,4 +36,4 @@ steps:
     deployToSlotOrASE: true
     ResourceGroupName: 'BincomAcademy'
     SlotName: 'production'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    packageForLinux: '$(Build.ArtifactStagingDirectory)/app.zip'
