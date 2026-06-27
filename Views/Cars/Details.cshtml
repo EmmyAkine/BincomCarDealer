@@ -1,4 +1,4 @@
-﻿@model BincomCarDealer.Models.CarItem
+@model BincomCarDealer.Models.CarItem
 
 @{
     var carTitle = $"{Model.Year} {Model.Make} {Model.Model}";
@@ -40,7 +40,24 @@
                 </div>
             </div>
 
-            <div class="details-desc">@Model.Description</div>
+            @{
+                var fullDesc = Model.Description ?? "";
+                var isLong = fullDesc.Length > 280;
+                var shortDesc = isLong ? fullDesc.Substring(0, 280).TrimEnd() + "…" : fullDesc;
+            }
+
+            @if (isLong)
+            {
+                <div class="details-desc" id="descShort">@shortDesc</div>
+                <div class="details-desc" id="descFull" style="display:none;">@fullDesc</div>
+                <button type="button" id="descToggle" class="btn btn-ghost btn-sm" style="margin-top:-1.25rem; margin-bottom:1.5rem;">
+                    Read more <i class="bi bi-chevron-down"></i>
+                </button>
+            }
+            else
+            {
+                <div class="details-desc">@fullDesc</div>
+            }
 
             <div class="inquiry-box">
                 @if (showSuccess)
@@ -82,3 +99,37 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+<script>
+    // Toggle full/short description
+    var descToggle = document.getElementById('descToggle');
+    if (descToggle) {
+        descToggle.addEventListener('click', function () {
+            var short = document.getElementById('descShort');
+            var full = document.getElementById('descFull');
+            var expanded = full.style.display !== 'none';
+
+            short.style.display = expanded ? '' : 'none';
+            full.style.display = expanded ? 'none' : '';
+            descToggle.innerHTML = expanded
+                ? 'Read more <i class="bi bi-chevron-down"></i>'
+                : 'Show less <i class="bi bi-chevron-up"></i>';
+        });
+    }
+
+    @if (showSuccess)
+    {
+        <text>
+        // Just submitted an inquiry — scroll the success message into view
+        // so it's obvious the page didn't just silently reload.
+        document.addEventListener('DOMContentLoaded', function () {
+            var successBox = document.querySelector('.success-box');
+            if (successBox) {
+                successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+        </text>
+    }
+</script>
+}
